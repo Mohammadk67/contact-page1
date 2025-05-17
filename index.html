@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>فرم ثبت اطلاعات تماس</title>
+</head>
+<body dir="rtl">
+  <h2>فرم ثبت اطلاعات تماس</h2>
+  <form id="contactForm">
+    <label>آدرس:</label><br>
+    <textarea id="address" rows="3" cols="40">سنندج، خیابان پاسداران، دانشگاه کردستان، دانشکده علوم انسانی و اجتماعی</textarea><br><br>
+
+    <label>تلفن:</label><br>
+    <input type="text" id="phone" value="۸۷۳۳۶۶۲۴۰۵ داخلی ۲۳۱۸"><br><br>
+
+    <label>ایمیل:</label><br>
+    <input type="email" id="email" value="r.shafei@uok.ac.ir"><br><br>
+
+    <button type="submit">ارسال</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAg9yV0MjrkJ9kKMtGMDnsMrkUWPq_m-Ss",
+      authDomain: "qrcode-unik.firebaseapp.com",
+      projectId: "qrcode-unik",
+      storageBucket: "qrcode-unik.firebasestorage.app",
+      messagingSenderId: "350678081837",
+      appId: "1:350678081837:web:033f0cdb79e9aa93d973a4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('contactForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const address = document.getElementById('address').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+
+      try {
+        await addDoc(collection(db, "contacts"), {
+          address: address,
+          phone: phone,
+          email: email
+        });
+        alert("اطلاعات با موفقیت ذخیره شد.");
+        form.reset();
+      } catch (error) {
+        console.error("خطا در ذخیره اطلاعات: ", error);
+        alert("خطایی رخ داده است.");
+      }
+    });
+  </script>
+</body>
+</html>
